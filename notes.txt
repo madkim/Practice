@@ -1,0 +1,127 @@
+int main(int argc, char *argv[]) {} represents a way to send arguments to a program
+where int argc is the integer number of arguments and the actual arguments in a
+vector argv. 
+______________________________________________________________________________________
+If one were to enter "cat file" into the command line, the int argc = 2 since
+there are two arguments in the argument count. The argument vector would include
+[cat,file,null] where null is a null-pointer. 
+______________________________________________________________________________________
+If a program takes in no arguments then it is valid to wrote int main() {} 
+main returns an int which is why the C programs start with int main(). They return
+0 for "success" and any other non-zero value for "failure"
+#http://stackoverflow.com/questions/3898021/mainint-argc-char-argv
+______________________________________________________________________________________
+When printing using printf in C, use %d to represent integers and %s to represent
+string.
+
+Ex. printf("I am %d years old.\n", age);
+    printf("My name is %s.\n, name);
+
+#http://c.learncodethehardway.org/book/ex3.html
+______________________________________________________________________________________
+Using the sizeof operator gives you the size of the data type specified i.e.
+sizeof(char) = the size of a char type. Often used to calculate the number of
+elements in an array: sizeof array/sizeof array[0]. 
+
+int a[17];
+int n = sizeof(a);
+since ints are 4 bytes long n = 68 -> to get the index 17 -> (68/4) = 17
+better to use sizeof(a[0]) instead of sizeof(int) just in case the type of a
+changed.
+
++++++++++Can be used in macros+++++++++++
+#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
+
+int a[17];
+int n = NELEMS(a);
+++++++++++++++++++++++++++++++++++++++++
+
+______________________________________________________________________________________
+POINTERS
+
+int *p  == int* p;   #p is a pointer to an int
+int **p == int** p;  #p is a pointer to a pointer to an int
+
+De-referencing: x = *p; #Assign to x the value pointed to by p
+Address of operator: p = &x; #Assign to pointer p the address of x
+
+myvar = 25;   #declaring variable
+foo = &myvar; #foo = 1776 (hypothetically if the memory address of myvar was 1776)
+bar = myvar;  #bar = 25
+
+Since foo is a variable that holds the address of variable myvar, foo is called a
+pointer. Pointers can be used to access the variable they point to directly using
+the dereference operator (*) aka "the value pointed to by" foo
+
+baz = *foo; #baz = 25 (value pointed to by foo -> 1776 -> 25)
+baz = foo;  #baz = 1776 (memory address stored in foo)
+
+NOTE: int * p1, * p2; #initializes two pointers of type int
+      int * p1, p2    #initializes a pointer of type int and an int
+
+Arrays are quite similar to pointers, their only difference is that pointer can be
+assigned new addresses while arrays cannot be. This makes sense since when
+initializing an array, a block of memory is created for which the array will
+occupy. A pointer on the other hand points to any block of memory and is therefore
+not restricted like an array.
+
+NOTE: a[5] = 0;   #a[offset of 5] = 0
+      *(a+5) = 0; #value pointed to by pointer (a+5) = 0
+      
+Both expressions are equivalent. An array's name can be used like a pointer to its
+first element:
+
+	int numbers[5];
+	int * p;
+	p = numbers <-> numbers[0];
+        p++ <-> numbers[0+1];
+	p = numbers + 3 <-> numbers[0+3];
+
+When initializing pointers, a pointer is always initialized to the address which
+it points to NOT the value being pointed at:
+
+	int myvar;
+	int * myptr = &myvar;
+	myptr = &myvar NOT *myptr = &myvar (Doesnt make sense anyways ->
+					    Cant set *myptr = address,)
+
+int *p; == int * p; #when initializing
+
+*p++   // same as *(p++): increment pointer, and dereference unincremented address
+*++p   // same as *(++p): increment pointer, and dereference incremented address
+++*p   // same as ++(*p): dereference pointer, and increment the value it points to
+(*p)++ // dereference pointer, and post-increment the value it points to
+
+When const is used in functions the pointers point to constant content they cannot
+modify; however, they are not constant themselves and can be incremented or
+assigned different addresses. 
+______________________________________________________________________________________
+// Pointers Example Program
+#include <iostream>
+using namespace std;
+
+int main ()
+{
+  int firstvalue = 5, secondvalue = 15;
+  int * p1, * p2;
+
+   p1 = &firstvalue;  // p1 = address of firstvalue
+   p2 = &secondvalue; // p2 = address of secondvalue
+   *p1 = 10;          // value pointed to by p1 = 10
+   *p2 = *p1;         // value pointed to by p2 = value pointed to by p1
+    p1 = p2;           // p1 = p2 (value of pointer is copied)
+    *p1 = 20;          // value pointed to by p1 = 20
+		  
+    cout << "firstvalue is " << firstvalue << '\n';
+    cout << "secondvalue is " << secondvalue << '\n';
+    return 0;
+}
+
+firstvalue = 10
+secondvalue = 20
+
+http://www.cplusplus.com/doc/tutorial/pointers/
+______________________________________________________________________________________
+
+
+
