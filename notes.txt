@@ -116,12 +116,82 @@ int main ()
     cout << "secondvalue is " << secondvalue << '\n';
     return 0;
 }
-
+OUTPUT:
 firstvalue = 10
 secondvalue = 20
 
 http://www.cplusplus.com/doc/tutorial/pointers/
 ______________________________________________________________________________________
+POINTERS TO POINTERS	
 
+char a;
+char *b;
+char **c;
+a = 'z';
+b = &a; //assume memory address of a = 7230
+c = &b; //assume memory address of b = 8092 
+
+  c = 8092  //c holds the memory address of b
+ *c = 7230  //dereferencing c gives the address held in b ->memory address of a
+**c = 'z'   //dereferencing c AGAIN gies the value in the address pointed to by b
+
+______________________________________________________________________________________
+VOID POINTERS	
+
+void pointers are pointers that point to a value that has no type. These can point
+to any data type since the length and dereferencing properties can be
+undetermined.
+
+HOWEVER note that with this flexibility the data pointed to by a void pointer
+cannot be directly dereferenced (obviously since there is no type associated with
+the value to be dereferenced)
+
+Therefore any address in a void pointer needs to be transformed into some other
+pointer TYPE that points to a concrete data type before being dereferenced.
+
+Useful as a generic function parameter for pointers whose value type at the
+address held is unknown or will lead to different conditions being met depending on 
+it's type.  
+______________________________________________________________________________________
+// Void Pointer Example Program
+#include <iostream>
+using namespace std;
+
+void increase (void* data, int psize)	//increaser function, takes in a void
+					//pointer and an int	
+{
+  if ( psize == sizeof(char) )				//if the int is equal to
+  							//the size of a char	
+  
+  { char* pchar; pchar=(char*)data; ++(*pchar); } 	//declare a char pointer
+  							//pchar and set it equal to 
+							//the function parameter data 
+							//cast as a char*
+							//dereference & increment
+ 
+  else if (psize == sizeof(int) )			//otherwise if the int is
+  							//equal to the size of an int
+  
+  { int* pint; pint=(int*)data; ++(*pint); }		//declare an int pointer
+  							//pint and set it equal to
+							//the function parameter
+							//data cast as an int*
+							//dereference & increment
+  }
+
+	int main ()
+	{
+	  char a = 'x';				//initialize a char 
+	  int b = 1602;				//initialize an int
+	  increase (&a,sizeof(a));		//pass in the address of the char
+	  					//and its size in bytes
+
+	  increase (&b,sizeof(b));		//pass in the address of the int 
+	  					//and its size in bytes
+	  
+	  cout << a << ", " << b << '\n';	//print out the new values of a
+	  					//and b
+	  return 0;
+		    }
 
 
