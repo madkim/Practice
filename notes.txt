@@ -151,47 +151,39 @@ pointer TYPE that points to a concrete data type before being dereferenced.
 
 Useful as a generic function parameter for pointers whose value type at the
 address held is unknown or will lead to different conditions being met depending on 
-it's type.  
+it's type. 
+
+NOTE: Also think of using void pointers if you do not wish to define the pointer type
+      initially. 
 ______________________________________________________________________________________
-// Void Pointer Example Program
-#include <iostream>
-using namespace std;
+NULL POINTERS
 
-void increase (void* data, int psize)	//increaser function, takes in a void
-					//pointer and an int	
-{
-  if ( psize == sizeof(char) )				//if the int is equal to
-  							//the size of a char	
-  
-  { char* pchar; pchar=(char*)data; ++(*pchar); } 	//declare a char pointer
-  							//pchar and set it equal to 
-							//the function parameter data 
-							//cast as a char*
-							//dereference & increment
- 
-  else if (psize == sizeof(int) )			//otherwise if the int is
-  							//equal to the size of an int
-  
-  { int* pint; pint=(int*)data; ++(*pint); }		//declare an int pointer
-  							//pint and set it equal to
-							//the function parameter
-							//data cast as an int*
-							//dereference & increment
-  }
+Pointers can point to addresses that do not refer to any valid element such as if
+you were to declare a pointer without initializing it:
+	
+	int * p;
 
-	int main ()
-	{
-	  char a = 'x';				//initialize a char 
-	  int b = 1602;				//initialize an int
-	  increase (&a,sizeof(a));		//pass in the address of the char
-	  					//and its size in bytes
+or initializing a pointer to outside the bounds of an array:
 
-	  increase (&b,sizeof(b));		//pass in the address of the int 
-	  					//and its size in bytes
-	  
-	  cout << a << ", " << b << '\n';	//print out the new values of a
-	  					//and b
-	  return 0;
-		    }
+	int myarray[10];
+	int * q = myarray + 20;
 
+Neither p nor q point to addresses known to contain a value; however neither will
+cause an error. 
+
+Although it is allowed to store any address in a pointer no matter whether there
+is something stored in tha address or not, what causes problems is when you
+dereference (attempt to access the value at that address) the pointer leading to
+undefined behavior from accessing a random value to getting an error at runtime. 
+
+In C++ a nullpointer can be defined with an int value of 0 or the nullptr keyword:
+
+	int * p = 0;
+	int * p = nullptr;
+	int * r = NULL;
+
+NULL pointer != void pointer
+nullpointer refers to the value stored in the value while void pointer referes to
+the type of data pointed to. 
+______________________________________________________________________________________
 
